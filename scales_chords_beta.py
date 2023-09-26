@@ -1,44 +1,29 @@
+from constants import WHITE_NOTES, CIRCLE_OF_SHARPS, CIRCLE_OF_FLATS, MODE_MOD, ROMAN_NUMERALS_MAJOR
+
 def get_scale(note,mode='Ionian'):
     #takes a note and returns the notes of the scale based on that note.
     mode = mode.upper()
 
-    mode_mod = {
-        'IONIAN':           [],
-        'MAJOR':            [],
-        'DORIAN':           [(3,'b'),(7,'b')],
-        'PHYRGIAN':         [(2,'b'),(3,'b'),(6,'b'),(7,'b')],
-        'LYDIAN':           [(4,'#')],
-        'MIXOLYDIAN':       [(7,'b')],
-        'MINOR':            [(3,'b'),(6,'b'),(7,'b')],
-        'AEOLIAN':          [(3,'b'),(6,'b'),(7,'b')],
-        'LOCRIAN':          [(2,'b'),(3,'b'),(5,'b'),(6,'b'),(7,'b')],
-        'HARMONIC':         [(3,'b'),(6,'b')],
-        'MELODIC':          [(3,'b')],
-        }
-
-    if mode not in mode_mod:
+    if mode not in MODE_MOD:
         print('Invalid mode chosen. Major selected as default.')
         mode = 'MAJOR'
-
-    circle_of_sharps = ['C','G','D','A','E','B','F#','C#']
-    circle_of_flats = ['C','F','Bb','Eb','Ab','Db','Gb','Cb']
-    white_notes = ['C','D','E','F','G','A','B']
-    new_scale = white_notes
+        
+    new_scale = [note for note in WHITE_NOTES]
 
     #Gets you a regular old major scale
-    if note in circle_of_sharps:
-        iter = circle_of_sharps.index(note)
+    if note in CIRCLE_OF_SHARPS:
+        iter = CIRCLE_OF_SHARPS.index(note)
         for i in range(iter):
             new_scale = new_scale[4:] + new_scale[:4]
             new_scale[6] = new_scale[6] + '#'
 
-    elif note in circle_of_flats:
-        iter = circle_of_flats.index(note)
+    elif note in CIRCLE_OF_FLATS:
+        iter = CIRCLE_OF_FLATS.index(note)
         for i in range(iter):
             new_scale = new_scale[3:] + new_scale[:3]
             new_scale[3] = new_scale[3] + 'b'
     # This modifies the major scale to get you whatever mode you pass in.
-    modifier = mode_mod[mode]
+    modifier = MODE_MOD[mode]
 
     for interval_direction in modifier:
         interval_index = interval_direction[0] - 1 #int
@@ -73,7 +58,6 @@ def get_chords_in_scale(root,extensions=5):
         print('Invalid extension chosen. 5 selected as default.')
         extensions = 5
 
-    roman_numerals_major = ['I','ii','iii','IV','V','vi','vii°']
     chords_in_scale = []
 
     for i in range(7):
@@ -81,8 +65,5 @@ def get_chords_in_scale(root,extensions=5):
         chords_in_scale.append(scale_in_thirds[:(extensions+1)//2])
         scale = scale[1:] + scale[:1]
 
-    with_romans = dict(zip(roman_numerals_major,chords_in_scale))
+    with_romans = dict(zip(ROMAN_NUMERALS_MAJOR,chords_in_scale))
     return with_romans
-
-# print(get_scale("C#","lydian"))
-
